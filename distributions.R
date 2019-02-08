@@ -73,3 +73,54 @@ The weight below which the lightest 20 percent of packets lie is asfollows:
 
 A simulation of five randomly selected packets can be found with thefollowing:
   round(rnorm(5,80.2,1.1),1)
+
+
+
+
+#TESTING 
+#NORMAL DISTRIB
+As an example, suppose that the daily maximum temperature in the monthof January
+in Dunedin, New Zealand, follows a normal distribution, with amean of 22 degrees 
+Celsius and a standard deviation of 1.5 degrees. Then,in line with the comments for
+situation 1, for samples of sizen=5, the sam-pling distribution of ¯Xwill be normal,
+with mean 22 and standard error1.5/???5???0.671.
+
+xvals3<-seq(16,28,by=0.1)
+fxvals3.samp<-dnorm(xvals3,22,1.5/sqrt(5))
+plot(xvals3, fxvals3.samp, type = "l", lty=2, lwd=2)
+abline(h=0,col="gray")
+fxvals3<-dnorm(xvals3, 22, 1.5)
+lines(xvals3, fxvals3,lwd=2)
+legend("topright", legend = c("raw obs distbn", "sampling distbn (mean)"),
+       lty = 1:2, lwd = c(2,2), bty = "n")
+abline(v=21.5, col="gray")
+xvals3.sub<-xvals3[xvals3<=21.5]
+fxvals3.sub <- fxvals3[xvals3<=21.5]
+fxvals3.samp.sub<-fxvals3.samp[xvals3<=21.5]
+polygon(cbind(c(21.5,xvals3.sub), c(0,fxvals3.sub)), density = 10)
+
+
+
+#PRZYKLAD BLAD STANDARDOWY
+
+Suppose a political commentator inthe United States is interested in the
+proportion of voting-age citizens inher home city that already know 
+how they will vote in the next presidentialelection. She obtains a yes or
+no answer from 118 suitable randomly selectedindividuals. Of these 
+individuals, 80 say they know how they’ll vote. To 
+inves-tigate the variability associated with the proportion of interest
+p.hat <- 80/118
+#68% know how they will vote.
+#ESTIMATE THE STANDARD ERROR WITH FOLLOWING
+p.standarderror <- sqrt(p.hat*(1-p.hat)/118)
+pvals<-seq(p.hat-5*p.standarderror, p.hat+5*p.standarderror, length=100)
+p.samp <- dnorm(pvals, mean = p.hat, sd=p.standarderror)
+plot(pvals, p.samp, type = "l", xlim = p.hat+c(-4,4)*p.standarderror,
+     ylim = c(0,max(p.samp)))
+abline(h=0, col="gray")
+pvals.sub <- pvals[pvals>=0.7 & pvals<=0.75]
+p.samp.sub <- p.samp[pvals>=0.7 & pvals<=0.75]
+#SHADED AREA MEANS THAT PROB OF SAMPLE PROPORTION FOR SAMPLES OF SIZE
+#N=118 IS BETWEEN 0.7 AND 0.75
+polygon(cbind(c(0.7,pvals.sub, 0.75), c(0,p.samp.sub, 0))
+        ,border = NA, col = "gray")
